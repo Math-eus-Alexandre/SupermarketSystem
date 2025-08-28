@@ -3,7 +3,14 @@ using namespace std;
 
 void setMenuOption(int &opcaoMenu)
 {
-    cout << "Insira uma opção do menu";
+    cout << "===========================================================\n"
+         << "|                                                         |\n"
+         << "|                    (1) Cadastro                         |\n"
+         << "|                    (2) Venda                            |\n"
+         << "|                    (3) Sair                             |\n"
+         << "|                                                         |\n"
+         << "===========================================================\n";
+
     cin >> opcaoMenu;
 }
 

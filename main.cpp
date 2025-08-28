@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-int setMenuOption(int &opcaoMenu)
+void setMenuOption(int &opcaoMenu)
 {
     cout << "Insira uma opção do menu";
     cin >> opcaoMenu;

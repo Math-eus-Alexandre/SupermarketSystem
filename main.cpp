@@ -5,60 +5,77 @@
 
 using namespace std;
 
-void clearScreen() {
+void clearScreen()
+{
 #ifdef _WIN32
-    system("cls");   // Windows
+    system("cls"); // Windows
 #else
     system("clear"); // Linux/Mac
 #endif
 }
 
-struct Produto{
+struct Produto
+{
     string nome;
-    string preco;    
+    string preco;
 };
 
-//Função usada para formatar o arquivo produtos em uma struct Produto. Usada pelo readProdutos()
-Produto separaCamposProd(string linha) {
-    Produto prod;
-    string campo;
-    int prodIndex = 0;
+vector<vector<string>> readTabela(string table)
+{
+    vector<vector<string>> registros;
+    fstream reader(table);
+    string linha;
 
-    for (int c = 0; c < linha.length(); c++) {
-        char letra = linha[c];
-        if (letra == ',') {
-            if (prodIndex == 0) {
-                prod.nome = campo;
-            } else if (prodIndex == 1) {
-                prod.preco = campo;
+    while (getline(reader, linha))
+    {
+        vector<string> celulas;
+        string valorCelula;
+
+        for (int i = 0; i < linha.length(); i++)
+        {
+            char currentChar = linha[i];
+
+            if (currentChar == ',')
+            {
+                celulas.push_back(valorCelula);
+                valorCelula = "";
             }
-            campo = "";
-            prodIndex++;
-        } else {
-            campo += letra;
+            else
+            {
+                valorCelula.push_back(currentChar);
+
+                // Se for o último caracter, salva a palavra armazenada na lista de células
+                if(i == linha.length() - 1) {
+                    celulas.push_back(valorCelula);
+                }
+            }
         }
-    }
 
-    if (prodIndex == 1) {
-        prod.preco = campo;
-    }
+        registros.push_back(celulas);
 
-    return prod;
+        return registros;
+    }
+    reader.close();
 }
 
-vector<Produto> readProdutos(string table){
-        vector<Produto> produtos;
-        string linha;
-        fstream reader(table);
-        while (getline(reader, linha)) {
-        Produto prodFormatado = separaCamposProd(linha);
-        produtos.push_back(prodFormatado);
-        }
-        reader.close();
-        return produtos;
+vector<Produto> readProdutos()
+{
+    vector<Produto> produtos;
+    vector<vector<string>> produtosNaoFormatados;
+
+    produtosNaoFormatados = readTabela("produtos.csv");
+    
+    for (int i = 0; i < produtosNaoFormatados.size(); i++)
+    {
+        Produto produto;
+        produto.nome = produtosNaoFormatados[i][0];
+        produto.preco = stof(produtosNaoFormatados[i][1]);
+
+        produtos.push_back(produto);
     }
 
-
+    return produtos;
+}
 
 void setMenuOption(int &opcaoMenu)
 {
@@ -91,7 +108,16 @@ void venderProduto(vector<Produto> produtos)
 
 int main()
 {
-    vector<Produto> produtos = readProdutos("produtos.csv");
+    vector<Produto> produtos = readProdutos();
+
+    cout << produtos.size();
+    for (int i = 0; i < produtos.size(); i++)
+    {
+        Produto produto = produtos[i];
+        cout << "Produto:" << endl
+             << "Nome: " << produto.nome << " Preco: " << produto.preco << endl;
+    }
+
     int opcaoMenu = -1;
     bool deveFechar = false;
 

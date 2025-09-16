@@ -17,7 +17,7 @@ void clearScreen()
 struct Produto
 {
     string nome;
-    string preco;
+    float preco;
 };
 
 vector<vector<string>> readTabela(string table)
@@ -45,17 +45,18 @@ vector<vector<string>> readTabela(string table)
                 valorCelula.push_back(currentChar);
 
                 // Se for o último caracter, salva a palavra armazenada na lista de células
-                if(i == linha.length() - 1) {
+                if (i == linha.length() - 1)
+                {
                     celulas.push_back(valorCelula);
                 }
             }
         }
 
         registros.push_back(celulas);
-
-        return registros;
     }
     reader.close();
+
+    return registros;
 }
 
 vector<Produto> readProdutos()
@@ -64,9 +65,10 @@ vector<Produto> readProdutos()
     vector<vector<string>> produtosNaoFormatados;
 
     produtosNaoFormatados = readTabela("produtos.csv");
-    
+
     for (int i = 0; i < produtosNaoFormatados.size(); i++)
     {
+        cout << produtosNaoFormatados[i][1] << endl;
         Produto produto;
         produto.nome = produtosNaoFormatados[i][0];
         produto.preco = stof(produtosNaoFormatados[i][1]);
@@ -110,7 +112,6 @@ int main()
 {
     vector<Produto> produtos = readProdutos();
 
-    cout << produtos.size();
     for (int i = 0; i < produtos.size(); i++)
     {
         Produto produto = produtos[i];

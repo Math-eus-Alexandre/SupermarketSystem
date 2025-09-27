@@ -22,11 +22,11 @@ struct Produto
 };
 
 
-
+//função que substitui a virgula pelos caracteres de escape
 string escaparVirgula(const string &campo)
 {
     string resultado = campo;
-    size_t pos = 0;
+    int pos = 0;
     while ((pos = resultado.find(",", pos)) != string::npos)
     {
         resultado.replace(pos, 1, "$##");
@@ -35,10 +35,11 @@ string escaparVirgula(const string &campo)
     return resultado;
 }
 
+//função que substitui os caracteres de escape pela virgula
 string desescaparVirgula(const string &campo)
 {
     string resultado = campo;
-    size_t pos = 0;
+    int pos = 0;
     while ((pos = resultado.find("$##", pos)) != string::npos)
     {
         resultado.replace(pos, 3, ",");
@@ -51,7 +52,7 @@ string desescaparVirgula(const string &campo)
 void writeTabela(string table, vector<string> celulas){
     ofstream writer(table, ios::app);
     for (int i = 0; i < celulas.size() ; i++){
-        writer << celulas[i];
+        writer << escaparVirgula(celulas[i]);
         //se for a ultima celula ele não escreve a virgula, deixando o final da linha somente com a quebra.
         if (i < celulas.size() - 1){
             writer << ',';
@@ -78,21 +79,15 @@ vector<vector<string>> readTabela(string table)
 
             if (currentChar == ',')
             {
-                celulas.push_back(valorCelula);
+                celulas.push_back(desescaparVirgula(valorCelula));
                 valorCelula = "";
             }
             else
             {
                 valorCelula.push_back(currentChar);
-
-                // Se for o último caracter, salva a palavra armazenada na lista de células
-                if (i == linha.length() - 1)
-                {
-                    celulas.push_back(valorCelula);
-                }
             }
         }
-
+        celulas.push_back(desescaparVirgula(valorCelula));
         registros.push_back(celulas);
     }
     reader.close();
@@ -109,14 +104,14 @@ void writeProdutos(Produto produto){
     celulas.push_back(produto.nome);
     celulas.push_back(to_string(produto.preco));
     celulas.push_back(to_string(produto.qtd_estoque));
-    writeTabela("produtos.csv", celulas);
+    writeTabela("produtos.txt", celulas);
 }
 
 vector<Produto> readProdutos(){
     vector<Produto> produtos;
     vector<vector<string>> produtosNaoFormatados;
 
-    produtosNaoFormatados = readTabela("produtos.csv");
+    produtosNaoFormatados = readTabela("produtos.txt");
 
     for (int i = 0; i < produtosNaoFormatados.size(); i++)
     {
@@ -177,7 +172,7 @@ void cadastrarProduto(){
 
     handleProdutos(produto);
     
-    // string teste = "produtos.csv";
+    // string teste = "produtos.txt";
     // readProdutos(teste);
 }
 

@@ -5,8 +5,7 @@
 
 using namespace std;
 
-void clearScreen()
-{
+void clearScreen(){
 #ifdef _WIN32
     system("cls"); // Windows
 #else
@@ -14,16 +13,32 @@ void clearScreen()
 #endif
 }
 
+//Structs:
 struct Produto
 {
     string nome;
     float preco;
+    int qtd_estoque;
 };
+
+//Funções de Leitura e escrita em arquivos.
+void writeTabela(string table, vector<string> celulas){
+    ofstream writer(table, ios::app);
+    for (int i = 0; i < celulas.size() ; i++){
+        writer << celulas[i];
+        //se for a ultima celula ele não escreve a virgula, deixando o final da linha somente com a quebra.
+        if (i < celulas.size() - 1){
+            writer << ',';
+        }
+    }
+    writer << endl;
+    writer.close();
+}
 
 vector<vector<string>> readTabela(string table)
 {
     vector<vector<string>> registros;
-    fstream reader(table);
+    ifstream reader(table);
     string linha;
 
     while (getline(reader, linha))
@@ -59,8 +74,19 @@ vector<vector<string>> readTabela(string table)
     return registros;
 }
 
-vector<Produto> readProdutos()
-{
+
+//Funções de gravação e leitura estruturadas para cada arquivo.
+
+//Produtos
+void writeProdutos(Produto produto){
+    vector<string> celulas;
+    celulas.push_back(produto.nome);
+    celulas.push_back(to_string(produto.preco));
+    celulas.push_back(to_string(produto.qtd_estoque));
+    writeTabela("produtos.csv", celulas);
+}
+
+vector<Produto> readProdutos(){
     vector<Produto> produtos;
     vector<vector<string>> produtosNaoFormatados;
 
@@ -68,15 +94,38 @@ vector<Produto> readProdutos()
 
     for (int i = 0; i < produtosNaoFormatados.size(); i++)
     {
-        cout << produtosNaoFormatados[i][1] << endl;
         Produto produto;
         produto.nome = produtosNaoFormatados[i][0];
         produto.preco = stof(produtosNaoFormatados[i][1]);
+        produto.qtd_estoque = stoi(produtosNaoFormatados[i][2]);
 
         produtos.push_back(produto);
     }
 
     return produtos;
+}
+
+
+//Funções de formatação e verificação dos cadastros.
+void handleProdutos(Produto novo_produto){
+    vector<Produto> produtos = readProdutos();
+    bool isNew = true;
+
+    for (int i = 0; i < produtos.size(); i++){
+        if (novo_produto.nome == produtos[i].nome){
+            isNew = false;
+            i = produtos.size();
+        }else{
+            isNew = true;
+        }
+    }
+    
+    if (isNew){
+        writeProdutos(novo_produto);
+    }else{
+        cout<<"produto já existe";
+    }
+
 }
 
 void setMenuOption(int &opcaoMenu)
@@ -93,16 +142,22 @@ void setMenuOption(int &opcaoMenu)
     cin >> opcaoMenu;
 }
 
-void cadastrarProduto()
-{
-    cout << "Cadastro de produto selecionado" << endl;
+void cadastrarProduto(){
 
+    Produto produto;
+    cout << "Cadastro de produto selecionado" << endl;
+    cout << "Digite os dados do produto a ser cadastrado, sendo esses Nome, Preco e Quantidade de entrada: " << endl;
+    cin >> produto.nome >> produto.preco >> produto.qtd_estoque;
+
+    handleProdutos(produto);
+    
     // string teste = "produtos.csv";
     // readProdutos(teste);
 }
 
-void venderProduto(vector<Produto> produtos)
+void venderProduto()
 {
+    vector<Produto> produtos = readProdutos();
     cout << "Venda de produto selecionada" << endl;
     cout << produtos[0].nome << endl;
     cout << produtos[1].nome << endl;
@@ -110,14 +165,7 @@ void venderProduto(vector<Produto> produtos)
 
 int main()
 {
-    vector<Produto> produtos = readProdutos();
-
-    for (int i = 0; i < produtos.size(); i++)
-    {
-        Produto produto = produtos[i];
-        cout << "Produto:" << endl
-             << "Nome: " << produto.nome << " Preco: " << produto.preco << endl;
-    }
+    
 
     int opcaoMenu = -1;
     bool deveFechar = false;
@@ -135,7 +183,7 @@ int main()
         }
         case 2:
         {
-            venderProduto(produtos);
+            venderProduto();
             break;
         }
         case 3:

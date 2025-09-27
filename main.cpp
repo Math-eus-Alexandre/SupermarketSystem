@@ -181,6 +181,16 @@ string verificaNome(string nome){
 }
 
 float verificaPreco(string preco_str){
+
+    for (int c = 0; c < preco_str.length(); c++){
+        char ch = preco_str[c];
+        if (!isdigit(ch) && ch != '.' && ch != ','){
+            clearScreen();
+            cout << "O preço digitado é inválido!" << endl;
+            return 0;
+        }
+    }
+
     for (int i = 0; i < preco_str.length(); i++){
         if (preco_str[i] == ','){
             preco_str[i] = '.';
@@ -191,6 +201,16 @@ float verificaPreco(string preco_str){
 }
 
 float verificaQtd(string qtd_str){
+
+    for (int c = 0; c < qtd_str.length(); c++){
+        char ch = qtd_str[c];
+        if (!isdigit(ch) && (ch != '.' && ch != ',')){
+            clearScreen();
+            cout<<"A quantidade digitada é inválida!"<<endl;
+            return 0;
+        } ;
+    }
+
     for (int i = 0; i < qtd_str.length(); i++){
         if (qtd_str[i] == ','){
             qtd_str[i] = '.';
@@ -218,22 +238,30 @@ void setMenuOption(int &opcaoMenu)
 
 void cadastrarProduto(){
 
+    clearScreen();
     string nome, preco, qtd_estoque;
 
     Produto produto;
     cout << "Cadastro de produto selecionado" << endl;
     cout << "Digite os dados do produto a ser cadastrado..."<< endl;
     cout << "Nome: ";
-    cin >> produto.nome;
+    cin >> nome;
+    produto.nome = verificaNome(nome);
+    
+    do{
     cout << "Preco:";
-    cin >> produto.preco;
+    cin >> preco;
+    produto.preco = verificaPreco(preco);
+    }while(produto.preco == 0);
+
+    do{
     cout << "Quantidade: ";
-    cin >> produto.qtd_estoque;
+    cin >> qtd_estoque;
+    produto.qtd_estoque = verificaQtd(qtd_estoque);
+    }while(produto.qtd_estoque == 0);
 
     handleProdutos(produto);
     
-    // string teste = "produtos.txt";
-    // readProdutos(teste);
 }
 
 void venderProduto()
@@ -249,20 +277,12 @@ void venderProduto()
 
 int main()
 {
-    // vector<Produto> produtos = readProdutos();
-
-    // for (int i = 0; i < produtos.size(); i++)
-    // {
-    //     Produto produto = produtos[i];
-    //     cout << "Produto:" << endl
-    //          << "Nome: " << produto.nome << " Preco: " << produto.preco << endl;
-    // }
-
     int opcaoMenu = -1;
     bool deveFechar = false;
 
     while (deveFechar == false)
     {
+        clearScreen();
         setMenuOption(opcaoMenu);
 
         switch (opcaoMenu)

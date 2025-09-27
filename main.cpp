@@ -223,11 +223,11 @@ void cadastrarProduto(){
     Produto produto;
     cout << "Cadastro de produto selecionado" << endl;
     cout << "Digite os dados do produto a ser cadastrado..."<< endl;
-    cout << "Nome: "<< endl;
-    cin >> nome;
-    cout << "Preço: "<< endl;
+    cout << "Nome: ";
+    cin >> produto.nome;
+    cout << "Preco:";
     cin >> produto.preco;
-    cout << "Quantidade: "<< endl;
+    cout << "Quantidade: ";
     cin >> produto.qtd_estoque;
 
     handleProdutos(produto);
@@ -239,21 +239,24 @@ void cadastrarProduto(){
 void venderProduto()
 {
     vector<Produto> produtos = readProdutos();
-    cout << "Venda de produto selecionada" << endl;
-    cout << produtos[0].nome << endl;
-    cout << produtos[1].nome << endl;
-}
-
-int main()
-{
-    vector<Produto> produtos = readProdutos();
-
     for (int i = 0; i < produtos.size(); i++)
     {
         Produto produto = produtos[i];
         cout << "Produto:" << endl
              << "Nome: " << produto.nome << " Preco: " << produto.preco << endl;
     }
+}
+
+int main()
+{
+    // vector<Produto> produtos = readProdutos();
+
+    // for (int i = 0; i < produtos.size(); i++)
+    // {
+    //     Produto produto = produtos[i];
+    //     cout << "Produto:" << endl
+    //          << "Nome: " << produto.nome << " Preco: " << produto.preco << endl;
+    // }
 
     int opcaoMenu = -1;
     bool deveFechar = false;

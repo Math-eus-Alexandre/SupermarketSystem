@@ -18,7 +18,7 @@ struct Produto
 {
     string nome;
     float preco;
-    int qtd_estoque;
+    float qtd_estoque;
 };
 
 
@@ -48,7 +48,6 @@ string desescaparVirgula(const string &campo)
     return resultado;
 }
 
-//Funções de Leitura e escrita em arquivos.
 void writeTabela(string table, vector<string> celulas){
     ofstream writer(table, ios::app);
     for (int i = 0; i < celulas.size() ; i++){
@@ -60,6 +59,21 @@ void writeTabela(string table, vector<string> celulas){
     }
     writer << endl;
     writer.close();
+}
+
+void replaceTabela(string table, vector<vector<string>> vetCelulas){
+    ofstream writer(table);
+    vector<string> celula;
+    
+    for (int i = 0; i < vetCelulas.size() ; i++){
+        for (int j = 0; j < vetCelulas[i].size(); j++){
+            writer << vetCelulas[i][j];
+            if (j < vetCelulas[i].size() - 1){
+                writer << ',';
+            }
+        }
+        writer << endl;        
+    }
 }
 
 vector<vector<string>> readTabela(string table)
@@ -97,7 +111,6 @@ vector<vector<string>> readTabela(string table)
 
 
 //Funções de gravação e leitura estruturadas para cada arquivo.
-
 //Produtos
 void writeProdutos(Produto produto){
     vector<string> celulas;
@@ -105,6 +118,19 @@ void writeProdutos(Produto produto){
     celulas.push_back(to_string(produto.preco));
     celulas.push_back(to_string(produto.qtd_estoque));
     writeTabela("produtos.txt", celulas);
+}
+
+void updateProdutos(Produto produto){
+    vector<vector<string>> produtos;
+    produtos = readTabela("produtos.txt");
+
+    for (int i = 0; i < produtos.size(); i++){
+        if (produtos[i][0] == produto.nome){
+            produtos[i][1] = to_string(produto.preco);
+            produtos[i][2] = to_string(stof(produtos[i][2]) + produto.qtd_estoque);
+        }
+    }
+    replaceTabela("produtos.txt", produtos);
 }
 
 vector<Produto> readProdutos(){
@@ -118,7 +144,7 @@ vector<Produto> readProdutos(){
         Produto produto;
         produto.nome = produtosNaoFormatados[i][0];
         produto.preco = stof(produtosNaoFormatados[i][1]);
-        produto.qtd_estoque = stoi(produtosNaoFormatados[i][2]);
+        produto.qtd_estoque = stof(produtosNaoFormatados[i][2]);
 
         produtos.push_back(produto);
     }
@@ -128,12 +154,13 @@ vector<Produto> readProdutos(){
 
 
 //Funções de formatação e verificação dos cadastros.
-void handleProdutos(Produto novo_produto){
+void handleProdutos(Produto produto){
     vector<Produto> produtos = readProdutos();
     bool isNew = true;
 
+    //verifica se é um novo produto.
     for (int i = 0; i < produtos.size(); i++){
-        if (novo_produto.nome == produtos[i].nome){
+        if (produto.nome == produtos[i].nome){
             isNew = false;
             i = produtos.size();
         }else{
@@ -142,13 +169,39 @@ void handleProdutos(Produto novo_produto){
     }
     
     if (isNew){
-        writeProdutos(novo_produto);
+        writeProdutos(produto);
     }else{
-        cout<<"produto já existe";
+        updateProdutos(produto);
     }
 
 }
 
+string verificaNome(string nome){
+    return nome;
+}
+
+float verificaPreco(string preco_str){
+    for (int i = 0; i < preco_str.length(); i++){
+        if (preco_str[i] == ','){
+            preco_str[i] = '.';
+        }
+    }
+    float preco = stof(preco_str);
+    return preco;
+}
+
+float verificaQtd(string qtd_str){
+    for (int i = 0; i < qtd_str.length(); i++){
+        if (qtd_str[i] == ','){
+            qtd_str[i] = '.';
+        }
+    }
+    float qtd = stof(qtd_str);
+    return qtd;
+}
+
+
+//Funções de tela.
 void setMenuOption(int &opcaoMenu)
 {
     // clearScreen();
@@ -165,10 +218,17 @@ void setMenuOption(int &opcaoMenu)
 
 void cadastrarProduto(){
 
+    string nome, preco, qtd_estoque;
+
     Produto produto;
     cout << "Cadastro de produto selecionado" << endl;
-    cout << "Digite os dados do produto a ser cadastrado, sendo esses Nome, Preco e Quantidade de entrada: " << endl;
-    cin >> produto.nome >> produto.preco >> produto.qtd_estoque;
+    cout << "Digite os dados do produto a ser cadastrado..."<< endl;
+    cout << "Nome: "<< endl;
+    cin >> nome;
+    cout << "Preço: "<< endl;
+    cin >> produto.preco;
+    cout << "Quantidade: "<< endl;
+    cin >> produto.qtd_estoque;
 
     handleProdutos(produto);
     

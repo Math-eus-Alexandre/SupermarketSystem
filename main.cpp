@@ -21,6 +21,32 @@ struct Produto
     int qtd_estoque;
 };
 
+
+
+string escaparVirgula(const string &campo)
+{
+    string resultado = campo;
+    size_t pos = 0;
+    while ((pos = resultado.find(",", pos)) != string::npos)
+    {
+        resultado.replace(pos, 1, "$##");
+        pos += 3; // pula o tamanho da sequência
+    }
+    return resultado;
+}
+
+string desescaparVirgula(const string &campo)
+{
+    string resultado = campo;
+    size_t pos = 0;
+    while ((pos = resultado.find("$##", pos)) != string::npos)
+    {
+        resultado.replace(pos, 3, ",");
+        pos += 1;
+    }
+    return resultado;
+}
+
 //Funções de Leitura e escrita em arquivos.
 void writeTabela(string table, vector<string> celulas){
     ofstream writer(table, ios::app);
@@ -165,7 +191,14 @@ void venderProduto()
 
 int main()
 {
-    
+    vector<Produto> produtos = readProdutos();
+
+    for (int i = 0; i < produtos.size(); i++)
+    {
+        Produto produto = produtos[i];
+        cout << "Produto:" << endl
+             << "Nome: " << produto.nome << " Preco: " << produto.preco << endl;
+    }
 
     int opcaoMenu = -1;
     bool deveFechar = false;

@@ -21,6 +21,12 @@ struct Produto
     int qtd_estoque;
 };
 
+struct ItemVenda
+{
+    Produto produto;
+    int qtd_vendida;
+};
+
 
 //função que substitui a virgula pelos caracteres de escape
 string escaparVirgula(const string &campo)
@@ -176,12 +182,60 @@ void cadastrarProduto(){
     // readProdutos(teste);
 }
 
-void venderProduto()
+void venderProduto(vector<Produto> produtos)
 {
-    vector<Produto> produtos = readProdutos();
-    cout << "Venda de produto selecionada" << endl;
-    cout << produtos[0].nome << endl;
-    cout << produtos[1].nome << endl;
+    vector<ItemVenda> carrinho;
+    int opcao = -1;
+
+    while (opcao != 0)
+    {
+        cout << "\n================== Produtos Disponiveis =================\n";
+        cout << "0. Finalizar Venda\n";
+        for (int i = 0; i < produtos.size(); i++)
+        {
+            cout << i + 1 << ". " << produtos[i].nome << " - R$ " << produtos[i].preco << " Estoque: " << produtos[i].qtd_estoque << endl;
+        }
+        cout << "Escolha um produto para adicionar ao carrinho: ";
+        cin >> opcao;
+        // Verifica se a opção é válida
+        if (opcao > 0 && opcao <= produtos.size())
+        {
+            int quantidade;
+            cout << "Digite a quantidade: ";
+            cin >> quantidade;
+
+            if (quantidade > produtos[opcao - 1].qtd_estoque)
+            {
+                cout << "Quantidade indisponivel em estoque. Tente novamente.\n";
+            }
+            else
+            {
+                ItemVenda item;
+                item.produto = produtos[opcao - 1];
+                item.qtd_vendida = quantidade;
+                carrinho.push_back(item);
+                produtos[opcao - 1].qtd_estoque -= quantidade; // Atualiza o estoque
+                cout << "Produto adicionado ao carrinho.\n";
+            }
+        }
+        else if (opcao != 0)
+        {
+            cout << "Opcao invalida. Tente novamente.\n";
+        }
+
+    }
+    // mostra o resumo da venda
+    cout << "\n================== Resumo da Venda ==================\n";
+    int total = 0;
+    for (int i = 0; i < carrinho.size(); i++)
+    {
+        ItemVenda item = carrinho[i];
+        float subtotal = item.produto.preco * item.qtd_vendida;
+        total += subtotal;
+        cout << item.produto.nome << " - R$ " << item.produto.preco << " x " << item.qtd_vendida << " = R$ " << subtotal << endl;
+    }
+    cout << "=====================================================\n";
+    cout << "Total da venda: R$ " << total << endl;
 }
 
 int main()
@@ -211,7 +265,7 @@ int main()
         }
         case 2:
         {
-            venderProduto();
+            venderProduto(produtos);
             break;
         }
         case 3:

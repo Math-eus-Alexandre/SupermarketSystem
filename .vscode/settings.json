@@ -4,5 +4,6 @@
         "xstring": "cpp",
         "vector": "cpp",
         "iosfwd": "cpp"
-    }
+    },
+    "workbench.secondarySideBar.defaultVisibility": "visibleInWorkspace"
 }

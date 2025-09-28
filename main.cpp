@@ -290,8 +290,8 @@ struct Venda{
             escolha = verificaEscolha(escolha_str);
 
             if (escolha == 0) {
-                resultados.clear(); // limpa para nova busca
-                return; // volta para buscar de novo
+                resultados.clear(); 
+                return;
             } 
             else if (escolha > 0 && escolha <= resultados.size()) {
                 produtoSelecionado = resultados[escolha - 1];

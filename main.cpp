@@ -407,21 +407,24 @@ void venderProduto()
             }
         }   
 
-        float qtd_vendida;
+        string qtd_vendida_str;
+        float qtd_vendida_fl = 1;
         do {
+            if (qtd_vendida_fl == 0) cout << "Quantidade digitada invalida!" << endl;
             cout << "Digite a quantidade a ser vendida (Estoque disponível: " << produtoSelecionado.qtd_estoque << "): ";
-            cin >> qtd_vendida;
-            if (qtd_vendida <= 0 || qtd_vendida > produtoSelecionado.qtd_estoque) {
-                cout << "Quantidade inválida ou indisponivel. Tente novamente.\n";
-            }
-        } while (qtd_vendida <= 0 || qtd_vendida > produtoSelecionado.qtd_estoque);
+
+            cin >> qtd_vendida_str;
+            qtd_vendida_fl = verificaQtd(qtd_vendida_str);
+            
+            clearScreen();
+        } while(qtd_vendida_fl == 0);
         
-        produtoSelecionado.qtd_estoque -= produtoSelecionado.qtd_estoque + qtd_vendida;
+        produtoSelecionado.qtd_estoque -= produtoSelecionado.qtd_estoque + qtd_vendida_fl;
         // updateProdutos(produtoSelecionado);
 
         ItemVenda item;
         item.produto = produtoSelecionado;
-        item.qtd_vendida = qtd_vendida;
+        item.qtd_vendida = qtd_vendida_fl;
         carrinho.push_back(item);
         cout << "Produto adicionado ao carrinho.\n";
         cin.get();

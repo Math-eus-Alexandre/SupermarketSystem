@@ -244,8 +244,9 @@ void cadastrarProduto(){
     Produto produto;
     cout << "Cadastro de produto selecionado" << endl;
     cout << "Digite os dados do produto a ser cadastrado..."<< endl;
+    cin.ignore();
     cout << "Nome: ";
-    cin >> nome;
+    getline(cin, nome);
     produto.nome = verificaNome(nome);
     
     do{

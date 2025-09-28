@@ -361,39 +361,35 @@ void venderProduto()
     vector<Produto> produtos = readProdutos();
     vector<ItemVenda> carrinho;
     string busca;
+    Produto produtoSelecionado;
+    int continuar;
     clearScreen();
     while (true)
     {
         cout << "Busque um produto pelo nome (ou digite 'sair' para voltar ao menu): ";
         cin.ignore();
         getline(cin, busca);
-        if (busca == "sair")
-        {
-            return;
-        }
+        if (busca == "sair") return;
 
         vector<Produto> resultados;
-
-        for (int i = 0; i < produtos.size(); i++)
-        {
+        for (int i = 0; i < produtos.size(); i++){
             if (produtos[i].nome.find(busca) != string::npos)
             {
                 resultados.push_back(produtos[i]);
             }
         }
-        if (resultados.empty())
-        {
+
+        if (resultados.empty()){
             cout << "Nenhum produto encontrado. Tente novamente.\n";
             cin.get();
             clearScreen();
         }
         
         cout << "\nProdutos encontrados:\n";
-        for (int i = 0; i < resultados.size(); i++)
-        {
+        for (int i = 0; i < resultados.size(); i++){
             cout << i + 1 << ". " << resultados[i].nome << " - R$ " << resultados[i].preco << " Estoque: " << resultados[i].qtd_estoque << endl;
         }
-        Produto produtoSelecionado;
+
         int escolha = -1;
         while (true) {
             cin >> escolha;
@@ -401,7 +397,7 @@ void venderProduto()
                 clearScreen();
                 break;
             }
-            else if (escolha > 0 && escolha < resultados.size()) {
+            else if (escolha > 0 && escolha <= resultados.size()) {
                 produtoSelecionado = resultados[escolha - 1];
                 break;
             }
@@ -420,8 +416,8 @@ void venderProduto()
             }
         } while (qtd_vendida <= 0 || qtd_vendida > produtoSelecionado.qtd_estoque);
         
-        produtoSelecionado.qtd_estoque -= qtd_vendida;
-        updateProdutos(produtoSelecionado);
+        produtoSelecionado.qtd_estoque -= produtoSelecionado.qtd_estoque + qtd_vendida;
+        // updateProdutos(produtoSelecionado);
 
         ItemVenda item;
         item.produto = produtoSelecionado;
@@ -430,28 +426,30 @@ void venderProduto()
         cout << "Produto adicionado ao carrinho.\n";
         cin.get();
         clearScreen();
-        cout << "Deseja adicionar mais produtos? (s/n): ";
-        char continuar;
+        cout << "(1) Adicionar novo produto"<<endl;
+        cout << "(2) Finalizar venda"<<endl;
+        cout << "(3) Cancelar venda"<<endl;
+        
         cin >> continuar;
-        if (continuar == 'n' || continuar == 'N') {
+        if (continuar == 2 || continuar == 3) {
             break;
         }
         clearScreen();
     }   
-    if (!carrinho.empty()) {
-    cout << "\n================== Resumo da Venda ==================\n";
-    float total = 0;
-    for (int i = 0; i < carrinho.size(); i++)
-    {
-        ItemVenda item = carrinho[i];
-        float subtotal = item.produto.preco * item.qtd_vendida;
-        total += subtotal;
-        cout << item.produto.nome << " - R$ " << item.produto.preco << " x " << item.qtd_vendida << " = R$ " << subtotal << endl;
-    }
-    pagamento(total);
-    cout << "\nPressione Enter para voltar ao menu...";
-    cin.ignore();
-    cin.get();
+    if (!carrinho.empty() && continuar == 2) {
+        updateProdutos(produtoSelecionado);
+        cout << "\n================== Resumo da Venda ==================\n";
+        float total = 0;
+        for (int i = 0; i < carrinho.size(); i++){
+            ItemVenda item = carrinho[i];
+            float subtotal = item.produto.preco * item.qtd_vendida;
+            total += subtotal;
+            cout << item.produto.nome << " - R$ " << item.produto.preco << " x " << item.qtd_vendida << " = R$ " << subtotal << endl;
+        }
+        pagamento(total);
+        cout << "\nPressione Enter para voltar ao menu...";
+        cin.ignore();
+        cin.get();
     }
 }
 

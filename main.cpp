@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <ctime>
 
 using namespace std;
 
@@ -282,55 +283,164 @@ void cadastrarProduto(){
     if (opcaoMenu == 1){
         cadastrarProduto();
     }
-    
+}
+
+void pagamento(float totalVenda) 
+{
+    int opcaoPagamento;
+    cout << "\n================== Total ==================\n";
+    cout << "\nTotal da compra: R$ " << totalVenda << endl;
+    do {
+        cout << "\n================== Pagamento ==================\n";
+        cout << "Escolha a forma de pagamento:\n";
+        cout << "1 - À vista (5% de desconto)\n";
+        cout << "2 - Parcelado em até 3x sem juros\n";
+        cout << "3 - Parcelado em até 12x com 10% de juros\n";
+        cout << "Opção: ";
+        cin >> opcaoPagamento;
+        if (opcaoPagamento < 1 || opcaoPagamento > 3) 
+        {
+            cout << "Opção inválida. Tente novamente.\n";
+        }
+    } while (opcaoPagamento < 1 || opcaoPagamento > 3);
+
+    float valorFinal = totalVenda;
+    int parcelas = 1;
+
+    switch (opcaoPagamento) {
+        case 1:
+            valorFinal *= 0.95;
+            cout << "Pagamento à vista com 5% de desconto. Valor final: R$ " << valorFinal << endl;
+            parcelas = 1;
+            break;
+
+        case 2:
+            do {
+                cout << "Número de parcelas (1 a 3): ";
+                cin >> parcelas;
+                if (parcelas < 1 || parcelas > 3)
+                    cout << "Número de parcelas inválido. Tente novamente.\n";
+            } while (parcelas < 1 || parcelas > 3);
+            valorFinal = totalVenda;
+            break;
+
+        case 3:
+            do {
+                cout << "Número de parcelas (4 a 12): ";
+                cin >> parcelas;
+                if (parcelas < 4 || parcelas > 12)
+                    cout << "Número de parcelas inválido. Tente novamente.\n";
+            } while (parcelas < 4 || parcelas > 12);
+            valorFinal = totalVenda * 1.10;
+            break;
+    }
+
+    float valorParcela = valorFinal / parcelas;
+    cout << "\n==================Detalhamento do pagamento:==================\n";
+
+    time_t t = time(0);
+    tm* dataAtual = localtime(&t);
+
+    for (int i = 0; i < parcelas; i++)
+    {
+        tm vencimento = *dataAtual;
+        vencimento.tm_mon += i;
+        mktime(&vencimento); // normaliza data
+
+        string dia = (vencimento.tm_mday < 10 ? "0" : "") + to_string(vencimento.tm_mday);
+        string mes = (vencimento.tm_mon + 1 < 10 ? "0" : "") + to_string(vencimento.tm_mon + 1);
+        string ano = to_string(vencimento.tm_year + 1900);
+
+        cout << i + 1 << "ª parcela: R$ " << valorParcela 
+             << " - Vencimento: " << dia << "/" << mes << "/" << ano << endl;
+    }
 }
 
 void venderProduto()
 {
     vector<Produto> produtos = readProdutos();
     vector<ItemVenda> carrinho;
-    int opcao = -1;
-
-    while (opcao != 0)
+    string busca;
+    clearScreen();
+    while (true)
     {
-        cout << "\n================== Produtos Disponiveis =================\n";
-        cout << "0. Finalizar Venda\n";
+        cout << "Busque um produto pelo nome (ou digite 'sair' para voltar ao menu): ";
+        cin.ignore();
+        getline(cin, busca);
+        if (busca == "sair")
+        {
+            return;
+        }
+
+        vector<Produto> resultados;
+
         for (int i = 0; i < produtos.size(); i++)
         {
-            cout << i + 1 << ". " << produtos[i].nome << " - R$ " << produtos[i].preco << " Estoque: " << produtos[i].qtd_estoque << endl;
-        }
-        cout << "Escolha um produto para adicionar ao carrinho: ";
-        cin >> opcao;
-        // Verifica se a opção é válida
-        if (opcao > 0 && opcao <= produtos.size())
-        {
-            int quantidade;
-            cout << "Digite a quantidade: ";
-            cin >> quantidade;
-
-            if (quantidade > produtos[opcao - 1].qtd_estoque)
+            if (produtos[i].nome.find(busca) != string::npos)
             {
-                cout << "Quantidade indisponivel em estoque. Tente novamente.\n";
-            }
-            else
-            {
-                ItemVenda item;
-                item.produto = produtos[opcao - 1];
-                item.qtd_vendida = quantidade;
-                carrinho.push_back(item);
-                produtos[opcao - 1].qtd_estoque -= quantidade; // Atualiza o estoque
-                cout << "Produto adicionado ao carrinho.\n";
+                resultados.push_back(produtos[i]);
             }
         }
-        else if (opcao != 0)
+        if (resultados.empty())
         {
-            cout << "Opcao invalida. Tente novamente.\n";
+            cout << "Nenhum produto encontrado. Tente novamente.\n";
+            cin.get();
+            clearScreen();
         }
+        
+        cout << "\nProdutos encontrados:\n";
+        for (int i = 0; i < resultados.size(); i++)
+        {
+            cout << i + 1 << ". " << resultados[i].nome << " - R$ " << resultados[i].preco << " Estoque: " << resultados[i].qtd_estoque << endl;
+        }
+        Produto produtoSelecionado;
+        int escolha = -1;
+        while (true) {
+            cin >> escolha;
+            if (escolha == 0) {
+                clearScreen();
+                break;
+            }
+            else if (escolha > 0 && escolha < resultados.size()) {
+                produtoSelecionado = resultados[escolha - 1];
+                break;
+            }
+            else {
+                cout << "Escolha inválida. Tente novamente.\n"
+                     << "Digite o número do produto ou 0 para buscar novamente: ";
+            }
+        }   
 
-    }
-    // mostra o resumo da venda
+        float qtd_vendida;
+        do {
+            cout << "Digite a quantidade a ser vendida (Estoque disponível: " << produtoSelecionado.qtd_estoque << "): ";
+            cin >> qtd_vendida;
+            if (qtd_vendida <= 0 || qtd_vendida > produtoSelecionado.qtd_estoque) {
+                cout << "Quantidade inválida ou indisponivel. Tente novamente.\n";
+            }
+        } while (qtd_vendida <= 0 || qtd_vendida > produtoSelecionado.qtd_estoque);
+        
+        produtoSelecionado.qtd_estoque -= qtd_vendida;
+        updateProdutos(produtoSelecionado);
+
+        ItemVenda item;
+        item.produto = produtoSelecionado;
+        item.qtd_vendida = qtd_vendida;
+        carrinho.push_back(item);
+        cout << "Produto adicionado ao carrinho.\n";
+        cin.get();
+        clearScreen();
+        cout << "Deseja adicionar mais produtos? (s/n): ";
+        char continuar;
+        cin >> continuar;
+        if (continuar == 'n' || continuar == 'N') {
+            break;
+        }
+        clearScreen();
+    }   
+    if (!carrinho.empty()) {
     cout << "\n================== Resumo da Venda ==================\n";
-    int total = 0;
+    float total = 0;
     for (int i = 0; i < carrinho.size(); i++)
     {
         ItemVenda item = carrinho[i];
@@ -338,9 +448,13 @@ void venderProduto()
         total += subtotal;
         cout << item.produto.nome << " - R$ " << item.produto.preco << " x " << item.qtd_vendida << " = R$ " << subtotal << endl;
     }
-    cout << "=====================================================\n";
-    cout << "Total da venda: R$ " << total << endl;
+    pagamento(total);
+    cout << "\nPressione Enter para voltar ao menu...";
+    cin.ignore();
+    cin.get();
+    }
 }
+
 
 int main()
 {

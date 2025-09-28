@@ -239,6 +239,7 @@ void setMenuOption(int &opcaoMenu)
 void cadastrarProduto(){
 
     clearScreen();
+    int opcaoMenu = -1;
     string nome, preco, qtd_estoque;
 
     Produto produto;
@@ -248,20 +249,33 @@ void cadastrarProduto(){
     cout << "Nome: ";
     getline(cin, nome);
     produto.nome = verificaNome(nome);
+    clearScreen();
     
     do{
     cout << "Preco:";
     cin >> preco;
     produto.preco = verificaPreco(preco);
     }while(produto.preco == 0);
+    clearScreen();
 
     do{
     cout << "Quantidade: ";
     cin >> qtd_estoque;
     produto.qtd_estoque = verificaQtd(qtd_estoque);
     }while(produto.qtd_estoque == 0);
+    clearScreen();
 
     handleProdutos(produto);
+
+    cout << "Produto " << produto.nome << " cadastrado com sucesso!"<<endl<<endl;
+    cout << "Escolha uma opção: "<< endl;
+    cout << "1 - Cadastrar novo produto"<< endl;
+    cout << "2 - Voltar para o menu"<<endl;
+    cin >> opcaoMenu;
+
+    if (opcaoMenu == 1){
+        cadastrarProduto();
+    }
     
 }
 

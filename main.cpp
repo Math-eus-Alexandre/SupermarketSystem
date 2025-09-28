@@ -227,11 +227,25 @@ float verificaQtd(string qtd_str){
     return qtd;
 }
 
+int verificaOpcMenu(string opc_menu){
+    for (int c = 0; c < opc_menu.length(); c++){
+        char ch = opc_menu[c];
+        if (!isdigit(ch) || opc_menu.length() > 1 || stoi(opc_menu) > 3){
+            clearScreen();
+            cout<<"A opção digitada é inválida!"<<endl;
+            return 0;
+        }
+    }
+    return stoi(opc_menu);
+}
 
 //Funções de tela.
 void setMenuOption(int &opcaoMenu)
 {
-    // clearScreen();
+    string opcao_menu_str;
+    clearScreen();
+    do{
+    
     cout << "===========================================================\n"
          << "|                                                         |\n"
          << "|                    (1) Cadastro                         |\n"
@@ -240,7 +254,10 @@ void setMenuOption(int &opcaoMenu)
          << "|                                                         |\n"
          << "===========================================================\n";
 
-    cin >> opcaoMenu;
+        cout << "Selecione uma das opcoes:  ";
+        cin >> opcao_menu_str;
+        opcaoMenu = verificaOpcMenu(opcao_menu_str);
+    }while(opcaoMenu == 0);
 }
 
 void cadastrarProduto(){
@@ -455,7 +472,6 @@ void venderProduto()
         cin.get();
     }
 }
-
 
 int main()
 {

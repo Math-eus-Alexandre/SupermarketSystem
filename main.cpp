@@ -285,8 +285,9 @@ void cadastrarProduto(){
     
 }
 
-void venderProduto(vector<Produto> produtos)
+void venderProduto()
 {
+    vector<Produto> produtos = readProdutos();
     vector<ItemVenda> carrinho;
     int opcao = -1;
 
@@ -343,19 +344,6 @@ void venderProduto(vector<Produto> produtos)
 
 int main()
 {
-    vector<Produto> produtos = readProdutos();
-
-    vector<Produto> produtos = readProdutos();
-    for (int i = 0; i < produtos.size(); i++)
-    {
-        Produto produto = produtos[i];
-        cout << "Produto:" << endl
-             << "Nome: " << produto.nome << " Preco: " << produto.preco << endl;
-    }
-}
-
-int main()
-{
     int opcaoMenu = -1;
     bool deveFechar = false;
 
@@ -373,7 +361,7 @@ int main()
         }
         case 2:
         {
-            venderProduto(produtos);
+            venderProduto();
             break;
         }
         case 3:

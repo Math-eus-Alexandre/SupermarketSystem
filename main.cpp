@@ -239,7 +239,7 @@ void printaProdutos(){
         cout << produtos[i].nome << " - R$ " << produtos[i].preco << " x " << produtos[i].qtd_estoque << endl;
     }
 
-    cout << "Digite qualquer caractere para continuar..." << endl;
+    cout << "Pressione enter para continuar..." << endl;
     
     cin.ignore();
     cin.get();
@@ -507,8 +507,6 @@ void venderProduto(){
     int opcao_venda_int;
 
         do{
-        cout << "Agora aqui" << endl;
-        cin.get();
         clearScreen();
         cout << "(1) Exibir lista de produtos"<<endl;
         cout << "(2) Adicionar novo produto"<<endl;
@@ -523,13 +521,11 @@ void venderProduto(){
         }
         } while (opcao_venda_int < 1 && opcao_venda_int > 4);
         
-        cin.get();
         clearScreen();
 
         switch (opcao_venda_int){
             case 1:
             printaProdutos();
-            cout << "Cheguei aqui" << endl;
             break;
 
             case 2:

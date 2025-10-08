@@ -268,6 +268,16 @@ struct Venda {
     return stoi(escolha);
 }
 
+    void exibirListaProdutos(){
+        vector<Produto> produtos = readProdutos();
+        for (int i = 0; i < produtos.size(); i++){
+            cout << i + 1 << ". " << produtos[i].nome << endl;
+        }
+        cout << endl;
+        cout << "pressione enter para voltar.";
+        return;
+    }
+
     void adicionarProduto(){
         vector<Produto> produtos = readProdutos();
         string busca;
@@ -301,7 +311,7 @@ struct Venda {
         string escolha_str;
         int escolha = 0;
         while (true) {
-            cout << "Digite o número do produto ou 0 para buscar novamente: ";
+            cout << "Digite o numero do produto ou 0 para buscar novamente: ";
             cin >> escolha_str;
             escolha = verificaEscolha(escolha_str);
 
@@ -314,7 +324,7 @@ struct Venda {
                 break;
             } 
             else {
-                cout << "Escolha inválida. Tente novamente.\n";
+                cout << "Escolha invalida. Tente novamente.\n";
             }
         }
 
@@ -481,7 +491,7 @@ void cadastrarProduto(){
     handleProdutos(produto);
 
     cout << "Produto " << produto.nome << " cadastrado com sucesso!"<<endl<<endl;
-    cout << "Escolha uma opção: "<< endl;
+    cout << "Escolha uma opcao: "<< endl;
     cout << "1 - Cadastrar novo produto"<< endl;
     cout << "2 - Voltar para o menu"<<endl;
     cin >> opcaoMenu;
@@ -509,9 +519,9 @@ void venderProduto(){
         cin >> opcao_venda;
         opcao_venda_int = verificaOpcMenu(opcao_venda);
         if (opcao_venda_int < 1){
-            cout << "Opção inválida, selecione novamente: ";
+            cout << "Opção invalida, selecione novamente: ";
         }
-        } while (opcao_venda_int < 1 || opcao_venda_int > 4);
+        } while (opcao_venda_int < 1 && opcao_venda_int > 4);
         
         cin.get();
         clearScreen();

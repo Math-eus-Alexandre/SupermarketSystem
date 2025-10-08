@@ -7,11 +7,7 @@
 using namespace std;
 
 void clearScreen(){
-#ifdef _WIN32
     system("cls"); // Windows
-#else
-    system("clear"); // Linux/Mac
-#endif
 }
 
 //Structs:
@@ -453,8 +449,8 @@ struct Venda {
 void setMenuOption(int &opcaoMenu)
 {
     string opcao_menu_str;
-    clearScreen();
     do{
+        clearScreen();
     
     cout << "===========================================================\n"
          << "|                                                         |\n"

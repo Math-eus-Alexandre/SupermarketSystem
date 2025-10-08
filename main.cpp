@@ -542,8 +542,11 @@ void venderProduto(){
             case 3:
             venda.finalizarVenda();
             break;
+
+            case 4:
+            break;
         }
-        } while(opcao_venda_int != 3);
+        } while(opcao_venda_int != 3 && opcao_venda_int != 4);
     }   
 
 int main()

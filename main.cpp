@@ -423,6 +423,16 @@ struct Venda {
     };
 
     void finalizarVenda(){
+        if(carrinho.size() == 0){
+            cout << "Nenhum produto adicionado ao carrinho.\n";
+            cout << "Pressione Enter para voltar ao menu...";
+            cin.ignore();
+            cin.get();
+            return;
+        }
+
+        float total = 0;
+
         cout << "\n================== Resumo da Venda ==================\n";
         for (int i = 0; i < carrinho.size(); i++){
             ItemVenda item = carrinho[i];

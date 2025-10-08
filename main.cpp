@@ -243,6 +243,8 @@ void printaProdutos(){
     
     cin.get();
 
+    cin.ignore(1000, '\n');
+
     clearScreen();
 }
 

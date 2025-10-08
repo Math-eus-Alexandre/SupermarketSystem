@@ -148,7 +148,7 @@ vector<Produto> readProdutos(){
     return produtos;
 }
 
-//Funções de formatação e verificação dos cadastros.
+//Funções de formatação e verificação dos cadastros e cin.
 void handleProdutos(Produto produto){
     vector<Produto> produtos = readProdutos();
     bool isNew = true;
@@ -453,7 +453,7 @@ struct Venda {
 };
 
 
-//Funções de tela.
+//Funções de exibição em tela.
 void setMenuOption(int &opcaoMenu)
 {
     string opcao_menu_str;

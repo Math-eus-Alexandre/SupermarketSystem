@@ -517,7 +517,7 @@ void venderProduto(){
         do{
         cin >> opcao_venda;
         opcao_venda_int = verificaOpcMenu(opcao_venda);
-        if (opcao_venda_int < 1){
+        if (opcao_venda_int < 1 || opcao_venda_int > 4){
             cout << "Opção invalida, selecione novamente: ";
         }
         } while (opcao_venda_int < 1 || opcao_venda_int > 4);

@@ -577,6 +577,7 @@ int main()
         }
         case 3:
         {
+            clearScreen();
             deveFechar = true;
             break;
         }

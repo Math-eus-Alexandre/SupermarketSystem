@@ -185,7 +185,7 @@ float verificaPreco(string preco_str){
         char ch = preco_str[c];
         if (!isdigit(ch) && ch != '.' && ch != ','){
             clearScreen();
-            cout << "O preço digitado é inválido!" << endl;
+            cout << "O preco digitado é invalido!" << endl;
             return 0;
         }
     }
@@ -205,7 +205,7 @@ float verificaQtd(string qtd_str){
         char ch = qtd_str[c];
         if (!isdigit(ch) && (ch != '.' && ch != ',')){
             clearScreen();
-            cout<<"A quantidade digitada é inválida!"<<endl;
+            cout<<"A quantidade digitada e invalida!"<<endl;
             return 0;
         } ;
     }
@@ -334,7 +334,7 @@ struct Venda {
         float qtd_vendida_fl = 1;
         do {
             if (qtd_vendida_fl == 0) cout << "Quantidade digitada invalida!" << endl;
-            cout << "Digite a quantidade a ser vendida (Estoque disponível: " << produtoSelecionado.qtd_estoque << "): ";
+            cout << "Digite a quantidade a ser vendida (Estoque disponivel: " << produtoSelecionado.qtd_estoque << "): ";
 
             cin >> qtd_vendida_str;
             qtd_vendida_fl = verificaQtd(qtd_vendida_str);
@@ -360,14 +360,14 @@ struct Venda {
         do {
             cout << "\n================== Pagamento ==================\n";
             cout << "Escolha a forma de pagamento:\n";
-            cout << "1 - À vista (5% de desconto)\n";
-            cout << "2 - Parcelado em até 3x sem juros\n";
-            cout << "3 - Parcelado em até 12x com 10% de juros\n";
-            cout << "Opção: ";
+            cout << "1 - A vista (5\% de desconto)\n";
+            cout << "2 - Parcelado em ate 3x sem juros\n";
+            cout << "3 - Parcelado em ate 12x com 10\% de juros\n";
+            cout << "Opcao: ";
             cin >> opcaoPagamento;
             if (opcaoPagamento < 1 || opcaoPagamento > 3) 
             {
-                cout << "Opção inválida. Tente novamente.\n";
+                cout << "Opção invalida. Tente novamente.\n";
             }
         } while (opcaoPagamento < 1 || opcaoPagamento > 3);
 
@@ -377,26 +377,26 @@ struct Venda {
         switch (opcaoPagamento) {
             case 1:
                 valorFinal *= 0.95;
-                cout << "Pagamento à vista com 5% de desconto. Valor final: R$ " << valorFinal << endl;
+                cout << "Pagamento a vista com 5\% de desconto. Valor final: R$ " << valorFinal << endl;
                 parcelas = 1;
                 break;
 
             case 2:
                 do {
-                    cout << "Número de parcelas (1 a 3): ";
+                    cout << "Numero de parcelas (1 a 3): ";
                     cin >> parcelas;
                     if (parcelas < 1 || parcelas > 3)
-                        cout << "Número de parcelas inválido. Tente novamente.\n";
+                        cout << "Numero de parcelas invalido. Tente novamente.\n";
                 } while (parcelas < 1 || parcelas > 3);
                 valorFinal = totalVenda;
                 break;
 
             case 3:
                 do {
-                    cout << "Número de parcelas (4 a 12): ";
+                    cout << "Numero de parcelas (4 a 12): ";
                     cin >> parcelas;
                     if (parcelas < 4 || parcelas > 12)
-                        cout << "Número de parcelas inválido. Tente novamente.\n";
+                        cout << "Numero de parcelas invalido. Tente novamente.\n";
                 } while (parcelas < 4 || parcelas > 12);
                 valorFinal = totalVenda * 1.10;
                 break;
@@ -417,7 +417,7 @@ struct Venda {
             string mes = (vencimento.tm_mon + 1 < 10 ? "0" : "") + to_string(vencimento.tm_mon + 1);
             string ano = to_string(vencimento.tm_year + 1900);
 
-            cout << i + 1 << "ª parcela: R$ " << valorParcela 
+            cout << i + 1 << "a parcela: R$ " << valorParcela 
                 << " - Vencimento: " << dia << "/" << mes << "/" << ano << endl;
         }
     };

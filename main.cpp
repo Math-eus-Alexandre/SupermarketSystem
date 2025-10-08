@@ -241,7 +241,6 @@ void printaProdutos(){
 
     cout << "Pressione enter para continuar..." << endl;
     
-    cin.ignore();
     cin.get();
 
     clearScreen();
@@ -506,7 +505,7 @@ void venderProduto(){
     string opcao_venda;
     int opcao_venda_int;
 
-        do{
+        do{        
         clearScreen();
         cout << "(1) Exibir lista de produtos"<<endl;
         cout << "(2) Adicionar novo produto"<<endl;

@@ -223,11 +223,11 @@ int verificaOpcMenu(string opc_menu){
     for (int c = 0; c < opc_menu.length(); c++){
         char ch = opc_menu[c];
         if (!isdigit(ch)){
-            clearScreen();
-            cout<<"A opção digitada é inválida!"<<endl;
             return 0;
         }
     }
+    clearScreen();
+    cout<<"A opcao digitada e invalida!"<<endl;
     return stoi(opc_menu);
 }
 
@@ -467,7 +467,7 @@ void setMenuOption(int &opcaoMenu)
         cout << "Selecione uma das opcoes:  ";
         cin >> opcao_menu_str;
         opcaoMenu = verificaOpcMenu(opcao_menu_str);
-    }while(opcaoMenu == 0);
+    }while(opcaoMenu < 1 || opcaoMenu > 3);
 }
 
 void cadastrarProduto(){
@@ -477,13 +477,15 @@ void cadastrarProduto(){
     string nome, preco, qtd_estoque;
 
     Produto produto;
+
+    do{
     cout << "Cadastro de produto selecionado" << endl;
     cout << "Digite os dados do produto a ser cadastrado..."<< endl;
-    cin.ignore();
     cout << "Nome: ";
     getline(cin, nome);
     produto.nome = verificaNome(nome);
     clearScreen();
+    }while(produto.nome.length() == 0);
     
     do{
     cout << "Preco:";
@@ -517,22 +519,16 @@ void venderProduto(){
     string opcao_venda;
     int opcao_venda_int;
 
-        do{        
+        do{     
+
         clearScreen();
         cout << "(1) Exibir lista de produtos"<<endl;
         cout << "(2) Adicionar novo produto"<<endl;
         cout << "(3) Finalizar venda"<<endl;
         cout << "(4) Cancelar venda"<<endl;
-        
-        do{
+
         cin >> opcao_venda;
         opcao_venda_int = verificaOpcMenu(opcao_venda);
-        if (opcao_venda_int < 1 || opcao_venda_int > 4){
-            cout << "Opção invalida, selecione novamente: ";
-        }
-        } while (opcao_venda_int < 1 || opcao_venda_int > 4);
-        
-        clearScreen();
 
         switch (opcao_venda_int){
             case 1:

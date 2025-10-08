@@ -416,6 +416,8 @@ struct Venda {
             cout << i + 1 << "a parcela: R$ " << valorParcela 
                 << " - Vencimento: " << dia << "/" << mes << "/" << ano << endl;
         }
+
+        movimentaEstoque();
     };
 
     void finalizarVenda(){
@@ -432,7 +434,6 @@ struct Venda {
         cout << "\n================== Resumo da Venda ==================\n";
         for (int i = 0; i < carrinho.size(); i++){
             ItemVenda item = carrinho[i];
-            updateProdutos(item.produto);
             float subtotal = item.produto.preco * item.qtd_vendida;
             total += subtotal;
             cout << item.produto.nome << " - R$ " << item.produto.preco << " x " << item.qtd_vendida << " = R$ " << subtotal << endl;
@@ -442,6 +443,13 @@ struct Venda {
         cin.ignore();
         cin.get();
     };
+
+    // Debita o estoque do carrinho.
+    void movimentaEstoque() {
+        for (int i = 0; i < carrinho.size(); i++){
+            updateProdutos(carrinho[i].produto);
+        }
+    }
 };
 
 

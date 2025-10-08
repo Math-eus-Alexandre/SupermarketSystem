@@ -467,13 +467,15 @@ void cadastrarProduto(){
     string nome, preco, qtd_estoque;
 
     Produto produto;
+
+    do{
     cout << "Cadastro de produto selecionado" << endl;
     cout << "Digite os dados do produto a ser cadastrado..."<< endl;
-    cin.ignore();
     cout << "Nome: ";
     getline(cin, nome);
     produto.nome = verificaNome(nome);
     clearScreen();
+    }while(produto.nome.length() == 0);
     
     do{
     cout << "Preco:";

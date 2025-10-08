@@ -231,13 +231,29 @@ int verificaOpcMenu(string opc_menu){
     return stoi(opc_menu);
 }
 
+void printaProdutos(){
+    vector<Produto> produtos;
+    produtos = readProdutos();
+
+    for (int i = 0; i < produtos.size(); i++){
+        cout << produtos[i].nome << " - R$ " << produtos[i].preco << " x " << produtos[i].qtd_estoque << endl;
+    }
+
+    cout << "Digite qualquer caractere para continuar..." << endl;
+    
+    cin.ignore();
+    cin.get();
+
+    clearScreen();
+}
+
 struct ItemVenda
 {
     Produto produto;
     int qtd_vendida;
 };
 
-struct Venda{
+struct Venda {
     vector<ItemVenda> carrinho;
     float total = 0;
 
@@ -481,6 +497,7 @@ void venderProduto(){
     int opcao_venda_int;
 
         do{
+        cout << "Agora aqui" << endl;
         cin.get();
         clearScreen();
         cout << "(1) Exibir lista de produtos"<<endl;
@@ -494,13 +511,15 @@ void venderProduto(){
         if (opcao_venda_int < 1){
             cout << "Opção inválida, selecione novamente: ";
         }
-        } while (opcao_venda_int < 1);
+        } while (opcao_venda_int < 1 || opcao_venda_int > 4);
         
         cin.get();
         clearScreen();
 
         switch (opcao_venda_int){
             case 1:
+            printaProdutos();
+            cout << "Cheguei aqui" << endl;
             break;
 
             case 2:
@@ -510,11 +529,8 @@ void venderProduto(){
             case 3:
             venda.finalizarVenda();
             break;
-
-            case 4:
-            break;
         }
-        } while(opcao_venda_int != 3 && opcao_venda_int != 4);
+        } while(opcao_venda_int != 3);
     }   
 
 int main()

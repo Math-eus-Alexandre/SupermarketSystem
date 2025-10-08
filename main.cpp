@@ -519,7 +519,7 @@ void venderProduto(){
         if (opcao_venda_int < 1){
             cout << "Opção invalida, selecione novamente: ";
         }
-        } while (opcao_venda_int < 1 && opcao_venda_int > 4);
+        } while (opcao_venda_int < 1 || opcao_venda_int > 4);
         
         clearScreen();
 

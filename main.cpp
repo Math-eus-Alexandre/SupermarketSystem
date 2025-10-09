@@ -181,7 +181,7 @@ float verificaPreco(string preco_str){
         char ch = preco_str[c];
         if (!isdigit(ch) && ch != '.' && ch != ','){
             clearScreen();
-            cout << "O preco digitado é invalido!" << endl;
+            cout << "O preco digitado e invalido!" << endl;
             return 0;
         }
     }
@@ -219,11 +219,11 @@ int verificaOpcMenu(string opc_menu){
     for (int c = 0; c < opc_menu.length(); c++){
         char ch = opc_menu[c];
         if (!isdigit(ch)){
+            cout<<"A opcao digitada e invalida!"<<endl;
             return 0;
         }
     }
     clearScreen();
-    cout<<"A opcao digitada e invalida!"<<endl;
     return stoi(opc_menu);
 }
 
@@ -235,6 +235,9 @@ void printaProdutos(){
         cout << produtos[i].nome << " - R$ " << produtos[i].preco << " x " << produtos[i].qtd_estoque << endl;
     }
 
+    if (produtos.size() == 0){
+            cout << "Nao ha produtos cadastrados." << endl;
+        }
     cout << "Pressione enter para continuar..." << endl;
     
     cin.get();
@@ -267,6 +270,12 @@ struct Venda {
 
     void exibirListaProdutos(){
         vector<Produto> produtos = readProdutos();
+        if (produtos.size() == 0){
+            cout << "Nao ha produtos cadastrados." << endl;
+            cout << endl;
+            cout << "pressione enter para voltar.";
+            return;
+        }
         for (int i = 0; i < produtos.size(); i++){
             cout << i + 1 << ". " << produtos[i].nome << endl;
         }
@@ -283,6 +292,13 @@ struct Venda {
         vector<Produto> resultados;
         do{
             clearScreen();
+            if (produtos.size() == 0){
+            cout << "Nao ha produtos cadastrados." << endl;
+            cout << "pressione enter para voltar.";
+            cin.ignore(1000, '\n');
+            cin.get();
+            return;
+        }
             cout << "Busque um produto pelo nome: ";
             cin.ignore();
             getline(cin, busca);
@@ -295,7 +311,7 @@ struct Venda {
             }
 
             if (resultados.empty()){
-            cout << "Nenhum produto encontrado. Tente novamente.\n";
+                cout << "Nenhum produto encontrado. Tente novamente.\n";
             }
 
         } while (resultados.empty());
@@ -308,7 +324,7 @@ struct Venda {
         string escolha_str;
         int escolha = 0;
         while (true) {
-            cout << "Digite o numero do produto ou 0 para buscar novamente: ";
+            cout << "Digite o numero do produto ou 0 para cancelar: ";
             cin >> escolha_str;
             escolha = verificaEscolha(escolha_str);
 

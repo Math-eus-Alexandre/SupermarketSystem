@@ -349,6 +349,21 @@ struct Venda {
         cout << "Produto adicionado ao carrinho.\n";
     };
 
+    void printaCarrinho() {
+        float total = 0;
+        for(int i = 0; i < carrinho.size(); i++){
+            total += carrinho[i].produto.preco * carrinho[i].qtd_vendida;
+        }
+
+        cout << "Total R$: " << total << endl;
+
+        for (int i = 0; i < carrinho.size(); i++) {
+            cout << carrinho[i].produto.nome << " - R$ " << carrinho[i].produto.preco << " x " << carrinho[i].qtd_vendida << " = R$ " << carrinho[i].produto.preco * carrinho[i].qtd_vendida << endl;
+        }
+
+        cout << endl;
+    }
+
     void pagamento(float totalVenda) {
         int opcaoPagamento;
         cout << "\n================== Total ==================\n";
@@ -524,8 +539,10 @@ void venderProduto(){
     int opcao_venda_int;
 
         do{     
-
         clearScreen();
+
+        if(venda.carrinho.size() > 0) venda.printaCarrinho();
+
         cout << "(1) Exibir lista de produtos"<<endl;
         cout << "(2) Adicionar novo produto"<<endl;
         cout << "(3) Finalizar venda"<<endl;
